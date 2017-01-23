@@ -7,7 +7,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "be.neodigi.kotlinboilerplate"
@@ -42,6 +42,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    //Needed because of this https://github.com/square/okio/issues/58
+    lintOptions {
+        warning 'InvalidPackage'
+    }
+
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
@@ -53,7 +58,7 @@ kapt {
 
 dependencies {
     final PLAY_SERVICES_VERSION = '10.0.1'
-    final SUPPORT_LIBRARY_VERSION = '25.0.1'
+    final SUPPORT_LIBRARY_VERSION = '25.1.0'
     final RETROFIT_VERSION = '2.1.0'
     final OKHTTP_VERSION = '3.5.0'
     final DAGGER_VERSION = '2.8'
@@ -86,4 +91,9 @@ dependencies {
     kaptAndroidTest daggerCompiler
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+// Log out test results to console
+tasks.matching {it instanceof Test}.all {
+    testLogging.events = ["failed", "passed", "skipped"]
 }
